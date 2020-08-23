@@ -2,12 +2,9 @@
 
 ## 1.0.1
 
-* Fix reference version to react-hook-form-auto
+### Fixed
 
-## 1.0.1
-
-* Better select control
-* Allow helper text when there are no errors
+* Correcting this file
 
 ## 1.0.0
 

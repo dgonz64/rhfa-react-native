@@ -2,6 +2,8 @@
 
 This library allows your React application to automatically generate forms using [ReactHookForm](https://react-hook-form.com/) that are redered by [React Native](https://reactnative.dev/). The form and validations are generated following a schema inspired by [SimpleSchema](https://github.com/aldeed/simple-schema-js).
 
+It uses some react-native-community packages to help with checkbox, slider and picker. PR's for pure react counterparts are accepted!
+
 ## Installation
 
     $ npm install react-hook-form rhfa-react-native @react-native-community/checkbox @react-native-community/slider @react-native-community/picker --save
@@ -117,17 +119,5 @@ Labels can have a field that appears in a less prominent color adding some clari
 ```
 
 The label `tr('requiredLabel')` will be added automatically for required fields (unless you override with translations).
-
-### Any other
-
-This is just a reminder that you can set any property to wrapper or input:
-
-```javascript
-  heads: {
-    type: 'number',
-    addInputProps: { leftIcon: 'person' },
-    addWrapperProps: { labelInfo: '(batteries included)' }
-  },
-```
 
 ## [Documentation](https://github.com/dgonz64/react-hook-form-auto)
