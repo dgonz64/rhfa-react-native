@@ -1,6 +1,6 @@
 {
   "name": "rhfa-react-native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate automatic forms following a schema for React Native",
   "main": "dist/rhfa-react-native.js",
   "keywords": [
