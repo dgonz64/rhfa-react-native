@@ -61,7 +61,7 @@ The emergency styles are separated in its own bundle. The function `createStyles
 
 ```
 
-## Specific schema attributes for Blueprint
+## Specific schema attributes for React Native
 
 ### type = 'range'
 
@@ -79,7 +79,7 @@ Appart from `min` and `max`, you should setup `step`. It will coerce to nearest 
 
 ### Helper text
 
-You can specify helperText in the schema and it will be printed as Blueprint's `helperText`.
+You can specify helperText in the schema.
 
 ```javascript
     import { createSchema } from 'rhfa-react-native'
