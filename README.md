@@ -14,6 +14,8 @@ It uses some react-native-community packages to help with checkbox, slider and p
     import { createSchema, Autoform } from 'rhfa-react-native'
     import { createStyles } from 'rhfa-react-native/dist/emergencyStyles'
 
+    const style = createStyles()
+
     export const client = createSchema('client', {
       name: {
         type: 'string',
