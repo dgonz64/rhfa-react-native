@@ -18,17 +18,22 @@ import {
   processOptions,
   stringExists
 } from 'react-hook-form-auto'
-import { Controller } from 'react-hook-form'
 import Checkbox from '@react-native-community/checkbox'
 import Slider from '@react-native-community/slider'
 import { Picker } from '@react-native-community/picker'
+
+function createChanger(setValue, name) {
+  return function onChange(value) {
+    setValue(name, value, { shouldValidate: true })
+  }
+}
 
 const GroupAdaptor = ({
   name,
   field,
   fieldSchema,
   schemaTypeName,
-  errors,
+  errorText,
   inline,
   children,
   labelOverride,
@@ -40,12 +45,11 @@ const GroupAdaptor = ({
   } else {
     const label = typeof labelOverride != 'undefined' ?
       labelOverride : trField({ fieldSchema, schemaTypeName, field })
-    const error = errors[field]
 
     const helperId = trPath(schemaTypeName, field, '_helper')
     let helperText
-    if (error && error.message)
-      helperText = error.message
+    if (errorText)
+      helperText = errorText
     else if (stringExists(helperId))
       helperText = tr(helperId)
     else
@@ -57,12 +61,12 @@ const GroupAdaptor = ({
 
     let containerStyles = [
       styles.container,
-      error && styles.erroredContainer
+      errorText && styles.erroredContainer
     ].filter(style => style)
 
     let helperTextStyles = [
       styles.helperText,
-      error && styles.erroredHelperText
+      errorText && styles.erroredHelperText
     ]
 
     return (
@@ -91,57 +95,44 @@ const GroupAdaptor = ({
 }
 
 // Both render and adaptorComponent will do.
-const ControlAdaptor = props => {
-  const {
-    name,
-    defaultValue,
-    controlProps,
-    errors,
-    field,
-    fieldSchema,
-    formHook,
-    rules,
-    register,
-    adaptorComponent,
-    setValue,
-    styles,
-    render,
-    ...rest
-  } = props
-
-  const error = errors[field]
+const ControlAdaptor = ({
+  name,
+  defaultValue,
+  value,
+  errorText,
+  field,
+  fieldSchema,
+  formHook,
+  rules,
+  adaptorComponent,
+  children,
+  controlProps,
+  setValue,
+  styles,
+  render,
+  ...rest
+}) => {
   let inputStyle = [
     styles.input,
-    error && styles.erroredInput
+    errorText && styles.erroredInput
   ]
 
   // Will use my own onChange instead of Control's to
   // make it work with coercers
-  const handleChange = (text) => {
-    setValue(name, text, { shouldValidate: true })
-  }
+  const handleChange = createChanger(setValue, name)
 
   const Comp = adaptorComponent
-  const renderFunction = render || function({ value }) {
-    return (
-      <Comp
-        {...controlProps}
-        {...rest}
-        value={value}
-        onChange={handleChange}
-        styles={styles}
-        style={inputStyle}
-      />
-    )
-  }
+
+  console.log("ADAPTOR", name, "CHILDREN", children)
 
   return (
-    <Controller
-      name={name}
-      control={formHook.control}
-      defaultValue={defaultValue || ''}
-      render={renderFunction}
-      rules={rules}
+    <Comp
+      {...controlProps}
+      {...rest}
+      value={value}
+      onChange={handleChange}
+      styles={styles}
+      style={inputStyle}
     />
   )
 }
@@ -149,6 +140,7 @@ const ControlAdaptor = props => {
 export default {
   defaultWrap: GroupAdaptor,
   string: {
+    controlled: true,
     render: (props) => {
       return {
         ...props,
@@ -159,6 +151,7 @@ export default {
   },
   number: {
     coerce: value => value && parseFloat(value) || 0,
+    controlled: true,
     render: (props) => {
       return {
         ...props,
@@ -169,6 +162,7 @@ export default {
     }
   },
   password: {
+    controlled: true,
     render: (props) => {
       return {
         ...props,
@@ -179,17 +173,19 @@ export default {
     }
   },
   select: {
+    controlled: true,
+    
     render: {
       component: (props) => {
         const {
           schemaTypeName,
           name,
-          field,
-          fieldSchema,
-          setValue,
           formHook,
           defaultValue,
-          styles
+          styles,
+
+          value,
+          setValue,
         } = props
 
         const label = trField(props)
@@ -198,10 +194,12 @@ export default {
           addDefault: true
         })
 
-        const renderSelect = ({ value, onChange, onBlur }) =>
+        const handleChange = createChanger(setValue, name)
+
+        return (
           <Picker
             selectedValue={value}
-            onValueChange={onChange}
+            onValueChange={handleChange}
             style={styles.select}
           >
             {
@@ -214,15 +212,6 @@ export default {
               )
             }
           </Picker>
-
-        return (
-          <Controller
-            key={name}
-            name={name}
-            control={formHook.control}
-            defaultValue={defaultValue || 0}
-            render={renderSelect}
-          />
         )
       }
     }
@@ -230,6 +219,7 @@ export default {
   boolean: {
     wrapper: (props) => props.children,
     coerce: value => Boolean(value),
+    controlled: true,
     render: {
       component: (props) => {
         const {
@@ -237,63 +227,59 @@ export default {
           defaultValue,
           formHook,
           control,
-          styles
+          styles,
+
+          value,
+          setValue,
+          onBlur
         } = props
 
         const label = trField(props)
 
-        const renderCheckbox = ({ value, onChange, onBlur }) =>
+        const handleChange = createChanger(setValue, name)
+
+        return (
           <View style={styles.checkboxWrap}>
             <Checkbox
               key={name}
               name={name}
               value={value}
-              onValueChange={onChange}
+              onValueChange={handleChange}
             />
             <Text style={styles.checkboxLabel}>
               {label}
             </Text>
           </View>
-
-        return (
-          <Controller
-            key={name}
-            name={name}
-            control={formHook.control}
-            defaultValue={defaultValue || false}
-            render={renderCheckbox}
-          />
         )
       }
     }
   },
   radios: {
+    controlled: true,
     render: {
       component: (props) => {
         const {
           name,
           formHook,
           defaultValue,
-          styles
+          styles,
+
+          value,
+          setValue,
+          onBlur
         } = props
 
         const label = trField(props)
         const options = processOptions(props)
 
-        const renderRadio = ({ value, onChange, onBlur }) =>
+        const handleChange = createChanger(setValue, name)
+
+        return (
           <Radios
             options={options}
             value={value}
-            onChange={onChange}
+            onChange={handleChange}
             styles={styles}
-          />
-
-        return (
-          <Controller
-            name={name}
-            control={formHook.control}
-            defaultValue={defaultValue || 0}
-            render={renderRadio}
           />
         )
       }
@@ -301,6 +287,7 @@ export default {
   },
   range: {
     coerce: value => parseFloat(value),
+    controlled: true,
     render: {
       component: (props) => {
         const {
@@ -312,48 +299,44 @@ export default {
             sliderParams
           },
           formHook,
-          styles
+          styles,
+
+          value,
+          setValue,
+          onBlur
         } = props
 
-        const defaultValue = props.defaultValue ?? min
+        const defaultValue = typeof props.defaultValue == 'undefined' ?
+          min : props.defaultValue
         const stepExp = Math.log10(step)
         const stepDecimals = stepExp >= 0 ? 0 : -stepExp
 
-        const renderSlider = ({ value, onChange, onBlur }) => {
-          const handleChange = (newValue) => {
-            if (!step) {
-              onChange(newValue)
-            } else {
-              const steps = parseInt((newValue - min) / step)
-              const steppedValue = min + steps * step
-              const prettyValue = steppedValue.toFixed(stepDecimals)
-              onChange(parseFloat(prettyValue))
-            }
-          }
+        const change = createChanger(setValue, name)
 
-          return (
-            <View style={styles.sliderContainer}>
-              <Text style={styles.sliderValue}>{value}</Text>
-              <Slider
-                {...sliderParams}
-                minimumValue={min}
-                maximumValue={max}
-                value={value}
-                step={step}
-                onValueChange={handleChange}
-                style={styles.slider}
-              />
-            </View>
-          )
+        const handleChange = (newValue) => {
+          if (!step) {
+            change(newValue)
+          } else {
+            const steps = parseInt((newValue - min) / step)
+            const steppedValue = min + steps * step
+            const prettyValue = steppedValue.toFixed(stepDecimals)
+            change(parseFloat(prettyValue))
+          }
         }
-        
+
         return (
-          <Controller
-            name={name}
-            control={formHook.control}
-            defaultValue={defaultValue || min}
-            render={renderSlider}
-          />
+          <View style={styles.sliderContainer}>
+            <Text style={styles.sliderValue}>{value}</Text>
+            <Slider
+              {...sliderParams}
+              minimumValue={min}
+              maximumValue={max}
+              value={value}
+              step={step}
+              onValueChange={handleChange}
+              style={styles.slider}
+            />
+          </View>
         )
       }
     }
