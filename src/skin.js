@@ -34,6 +34,7 @@ const GroupAdaptor = ({
   fieldSchema,
   schemaTypeName,
   errorText,
+  helperText,
   inline,
   children,
   labelOverride,
@@ -46,14 +47,8 @@ const GroupAdaptor = ({
     const label = typeof labelOverride != 'undefined' ?
       labelOverride : trField({ fieldSchema, schemaTypeName, field })
 
-    const helperId = trPath(schemaTypeName, field, '_helper')
-    let helperText
     if (errorText)
       helperText = errorText
-    else if (stringExists(helperId))
-      helperText = tr(helperId)
-    else
-      helperText = fieldSchema.helperText
 
     const infoId = trPath(schemaTypeName, field, '_labelInfo')
     const labelInfo = stringExists(infoId) ?
@@ -123,8 +118,6 @@ const ControlAdaptor = ({
 
   const Comp = adaptorComponent
 
-  console.log("ADAPTOR", name, "CHILDREN", children)
-
   return (
     <Comp
       {...controlProps}
@@ -174,7 +167,6 @@ export default {
   },
   select: {
     controlled: true,
-    
     render: {
       component: (props) => {
         const {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+* Correct helperText management
+
 ## 1.1.0
 
 * Updated to react-hook-form-auto 1.3

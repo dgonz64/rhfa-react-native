@@ -100,15 +100,15 @@ export function createStyles({
       marginLeft: 4
     },
     helperText: {
-      fontSize: fontSize - 2,
-      color: '#101010'
+      fontSize: fontSize - 4,
+      color: '#606060'
     },
     erroredHelperText: {
       fontStyle: 'italic',
       color: errorColor
     },
     error: {
-      fontSize: fontSize - 2,
+      fontSize: fontSize - 4,
       fontStyle: 'italic',
       color: errorColor
     },
