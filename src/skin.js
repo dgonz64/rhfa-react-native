@@ -20,7 +20,7 @@ import {
 } from 'react-hook-form-auto'
 import Checkbox from '@react-native-community/checkbox'
 import Slider from '@react-native-community/slider'
-import { Picker } from '@react-native-community/picker'
+import { Picker } from '@react-native-picker/picker'
 
 function createChanger(setValue, name) {
   return function onChange(value) {

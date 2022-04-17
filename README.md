@@ -2,11 +2,22 @@
 
 This library allows your React application to automatically generate forms using [ReactHookForm](https://react-hook-form.com/) that are redered by [React Native](https://reactnative.dev/). The form and validations are generated following a schema inspired by [SimpleSchema](https://github.com/aldeed/simple-schema-js).
 
-It uses some react-native-community packages to help with checkbox, slider and picker. PR's for pure react counterparts are accepted!
+It uses some react-native-community packages to help with checkbox, slider and picker.
+
+## Upgrade to `1.2.0`
+
+You must change your `package.json` entry from `@react-native-community/picker` to `@react-native-picker/picker`. It will look like this:
+
+```
+    "dependencies": {
+      "@react-native-picker/picker": "^2.0.0",
+      ...
+    }
+```
 
 ## Installation
 
-    $ npm install react-hook-form rhfa-react-native @react-native-community/checkbox @react-native-community/slider @react-native-community/picker --save
+    $ npm install react-hook-form rhfa-react-native @react-native-community/checkbox @react-native-community/slider @react-native-picker/picker --save
 
 ## Usage
 
