@@ -1,5 +1,5 @@
 {
-  "name": "rhfa-react-native",
+  "name": "@agilegravity/rhfa-react-native",
   "version": "1.2.0",
   "description": "Generate automatic forms following a schema for React Native",
   "main": "dist/rhfa-react-native.js",
@@ -55,6 +55,6 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "react-hook-form-auto": "^1.0.0"
+    "react-hook-form-auto": "^1.3.14"
   }
 }
