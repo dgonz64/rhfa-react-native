@@ -18,7 +18,7 @@ import {
   processOptions,
   stringExists
 } from 'react-hook-form-auto'
-import Checkbox from '@react-native-community/checkbox'
+import Checkbox from 'expo-checkbox'
 import Slider from '@react-native-community/slider'
 import { Picker } from '@react-native-picker/picker'
 
@@ -69,7 +69,7 @@ const GroupAdaptor = ({
         <View style={styles.labelContainer}>
           <Text style={styles.label}>
             {label}
-          </Text>  
+          </Text>
           {
             labelInfo &&
               <Text style={styles.labelInfo}>
@@ -120,8 +120,8 @@ const ControlAdaptor = ({
 
   return (
     <Comp
-      {...controlProps}
       {...rest}
+      {...controlProps}
       value={value}
       onChange={handleChange}
       styles={styles}
@@ -161,7 +161,7 @@ export default {
         ...props,
         component: ControlAdaptor,
         adaptorComponent: TextInput,
-        controlProps: { type: 'password' }
+        controlProps: { secureTextEntry: true, type: 'password' }
       }
     }
   },

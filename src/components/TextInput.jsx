@@ -5,7 +5,8 @@ export const TextInput = ({
   value,
   onChange,
   style,
-  type
+  type,
+  secureTextEntry,
 }) => {
   return (
     <RNTextInput
@@ -13,6 +14,7 @@ export const TextInput = ({
       onChangeText={onChange}
       style={style}
       type={type}
+      secureTextEntry={secureTextEntry}
     />
   )
 }

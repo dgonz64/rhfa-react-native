@@ -34,7 +34,7 @@ module.exports = {
     'react': 'react',
     'react-native': 'react-native',
     'react-hook-form': 'react-hook-form',
-    '@react-native-community/checkbox': '@react-native-community/checkbox',
+    'expo-checkbox': 'expo-checkbox',
     '@react-native-community/slider': '@react-native-community/slider',
     '@react-native-picker/picker': '@react-native-picker/picker'
   }
